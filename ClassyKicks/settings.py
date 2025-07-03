@@ -86,10 +86,15 @@ WSGI_APPLICATION = 'ClassyKicks.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'classykicks123_db',
+        'USER': 'classykicks_user',
+        'PASSWORD': 'shalin12345M',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+# ...existing code...
 
 
 # Password validation
