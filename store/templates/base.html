@@ -26,7 +26,7 @@
           colors: {
             primary: '#FAF7F0',     
             darkBg: '#F8F3G9',      // Slate-800
-            lightBg: '#B17457',     // Slate-700
+            lightBg: '#B17492',     // Slate-700
             accent: '#4A4947',     // Rose-500
           }
         }
@@ -40,27 +40,37 @@
 <!-- Navbar -->
 <!-- Navbar -->
 <nav class="bg-lightBg shadow-md sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
-      <a href="/" class="text-2xl font-bold text-black hover:text-white transition animate-float">ClassyKicks</a>
+   <a href="/"
+   class="text-3xl font-extrabold bg-gradient-to-r from-[black] via-[#B17462] to-[black] bg-clip-text text-transparent 
+          hover:from-[#B17462] hover:via-[black] hover:to-[#B17462]
+          transition-all duration-500 ease-in-out 
+          animate-float-pro hover:scale-105 tracking-wide">
+  ClassyKicks
+</a>
 
-      <div class="hidden md:flex space-x-6 text-sm font-medium items-center">
-        <a href="{% url 'contact' %}" class="hover:text-accent transition">Contact</a>
 
+
+      <div class="hidden md:flex space-x-9 text-sm font-medium items-center">
+        
         {% if user.is_authenticated %}
+        <a href="{% url 'product_list' %}" class="hover:text-accent transition">Home</a>
           <a href="{% url 'add_brand' %}" class="hover:text-accent transition">Add Brand</a>
           <a href="{% url 'add_product' %}" class="hover:text-accent transition">Add Product</a>
-
-          <form method="post" action="{% url 'logout' %}" class="inline">
-            {% csrf_token %}
-            <button type="submit" class="hover:text-accent transition bg-transparent border-none p-0 m-0 text-sm">
-              Logout
-            </button>
-          </form>
+          
+        <a href="{% url 'contact' %}" class="hover:text-accent transition">Contact</a>
+        <form method="post" action="{% url 'logout' %}" class="inline">
+          {% csrf_token %}
+          <button type="submit" class="hover:text-accent transition bg-transparent border-none p-0 m-0 text-sm">
+            Logout
+          </button>
+        </form>
         {% else %}
-          <a href="{% url 'login' %}" class="hover:text-accent transition">Login</a>
-        {% endif %}
-      </div>
+        <a href="{% url 'contact' %}" class="hover:text-accent transition">Contact</a>
+        <a href="{% url 'login' %}" class="hover:text-accent transition">Login</a>
+          {% endif %}
+        </div>
 
       <!-- Mobile Menu Button -->
       <button id="mobile-menu-button" class="md:hidden text-white">
@@ -74,19 +84,22 @@
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 text-sm font-medium space-y-2">
-    <a href="{% url 'contact' %}" class="block py-2 text-accent hover:text-white">Contact</a>
-
+    
     {% if user.is_authenticated %}
-      <a href="{% url 'add_brand' %}" class="block py-2 text-accent hover:text-white">Add Brand</a>
-      <a href="{% url 'add_product' %}" class="block py-2 text-accent hover:text-white">Add Product</a>
-      <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
+    <a href="{% url 'product_list' %}" class="block py-2 text-accent hover:text-white">Home</a>
+    <a href="{% url 'add_brand' %}" class="block py-2 text-accent hover:text-white">Add Brand</a>
+    <a href="{% url 'add_product' %}" class="block py-2 text-accent hover:text-white">Add Product</a>
+    <a href="{% url 'contact' %}" class="block py-2 text-accent hover:text-white">Contact</a>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
         <button type="submit" class="block py-2 text-accent hover:text-white" style="text-decoration: none; background: none; border: none; padding: 0;">
           Logout
         </button>
       </form>
     {% else %}
+    <a href="{% url 'contact' %}" class="block py-2 text-accent hover:text-white">Contact</a>
       <a href="{% url 'login' %}" class="block py-2 text-accent hover:text-white">Login</a>
+
     {% endif %}
   </div>
 </nav>

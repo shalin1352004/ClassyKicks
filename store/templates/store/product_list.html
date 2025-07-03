@@ -2,11 +2,10 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 mt-10 text-[#FAF7F0]">
 
-  <h2 class="text-3xl font-bold text-center text-[#4A4947] mb-8">Home</h2>
+  <h2 class="text-4xl font-extrabold text-center text-[#4A4947] mb-12 tracking-wide uppercase">Explore Our Collection</h2>
 
-  <!-- Filter by Brand -->
-  <form method="get" class="flex flex-col md:flex-row gap-4 items-center justify-center mb-8">
-    <select name="brand" class="bg-[#D8D2C2] border border-[#4A4947] text-[#4A4947] px-4 py-2 rounded-lg">
+  <form method="get" class="flex flex-col md:flex-row gap-4 items-center justify-center mb-10">
+    <select name="brand" class="bg-[#D8D2C2] border border-[#4A4947] text-[#4A4947] px-4 py-2 rounded-lg shadow-md focus:outline-none">
       <option value="">All Brands</option>
       {% for brand in brands %}
         <option value="{{ brand.id }}" {% if request.GET.brand == brand.id|stringformat:"s" %}selected{% endif %}>
@@ -15,35 +14,33 @@
       {% endfor %}
     </select>
     <button type="submit"
-            class="bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold px-6 py-2 rounded-lg transition">
+              class="bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold px-6 py-2 rounded-lg shadow-md transition">
       Filter
     </button>
   </form>
 
-  <!-- Product Cards -->
-  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2"> {# Corrected lg:grid-cols3 to lg:grid-cols-3 #}
     {% for product in products %}
-      <div class="bg-[#F8F3D9] rounded-lg shadow-md overflow-hidden m-1">
-        <a href="{% url 'product_detail' product.pk %}" >
-        {% if product.images.first %}
-          <img src="{{ product.images.first.image.url }}"
-               alt="{{ product.name }}"
-               class="w-full h-44 sm:h-52 md:h-56 object-contain p-2 bg-white" />
-        {% endif %}
-        <div class="px-3 py-2 flex-1 flex flex-col justify-between">
-          <div>
-            <h3 class="text-base sm:text-lg font-semibold text-[#4A4947] mb-1">{{ product.name }}</h3>
-            <p class="text-sm text-[#4A4947] mb-1">{{ product.brand.name }}</p>
-            <p class="text-md font-bold text-[#4A4947] mb-2">₹{{ product.price }}</p>
-          </div>
-          <a href="{% url 'product_detail' product.pk %}" class="mt-auto bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold py-1.5 px-3 rounded-lg text-center transition">
+      <div class="bg-[#F8F3D9] w-full rounded-xl shadow-xl hover:shadow-2xl transition duration-300 overflow-hidden relative group">
+        <a href="{% url 'product_detail' product.pk %}">
+          {% if product.images.first %}
+            <img src="{{ product.images.first.image.url }}"
+                 alt="{{ product.name }}"
+                 class="w-full h-52 object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-105" />
+          {% endif %}
+        </a>
+        <div class="px-4 py-3 flex flex-col h-full">
+          <h3 class="text-lg font-bold text-[#4A4947] mb-1 text-center">{{ product.name }}</h3>
+          <p class="text-sm text-[#4A4947] text-center">{{ product.brand.name }}</p>
+          <p class="text-lg font-semibold text-[#4A4947] mt-2 text-center">₹{{ product.price }}</p>
+          <a href="{% url 'product_detail' product.pk %}"
+             class="mt-4 bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold py-2 px-4 rounded-lg text-center transition self-center w-full">
             View Details
           </a>
-        </a>
         </div>
       </div>
     {% empty %}
-      <p class="text-center col-span-full text-[#4A4947]">No products found.</p>
+      <p class="text-center col-span-full text-[#4A4947] text-xl">No products found.</p>
     {% endfor %}
   </div>
 </div>

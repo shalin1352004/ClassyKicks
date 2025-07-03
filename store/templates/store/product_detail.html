@@ -2,53 +2,137 @@
 {% load static %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto mt-10 px-4 text-[#FAF7g6]">
+<div class="max-w-4xl mx-auto mt-10 px-4 text-[#4A4947] space-y-6">
 
-  <div class="bg-[#F8F3D9] rounded-2xl shadow-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+  <!-- Product Images -->
+  <div>
+    {% if product.images.all %}
+      <div class="flex gap-3 overflow-x-auto">
+        {% for image in product.images.all %}
+          <img src="{{ image.image.url }}" alt="{{ product.name }}"
+               class="h-60 w-auto object-contain rounded-lg border border-[#4A4947] cursor-pointer"
+               onclick="openModal({{ forloop.counter0 }})" />
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="italic">No images available.</p>
+    {% endif %}
+  </div>
 
-    <!-- Product Images -->
-    <div>
-      {% if product.images.all %}
-        <div class="flex gap-3 overflow-x-auto">
-          {% for image in product.images.all %}
-            <img src="{{ image.image.url }}" alt="{{ product.name }}"
-                 class="h-60 w-auto object-contain rounded-lg border border-[#4A4947]" />
-          {% endfor %}
+  <!-- Product Info -->
+  <div class="space-y-2">
+    <h2 class="text-3xl font-bold">{{ product.name }}</h2>
+    <p><strong class="text-[#B17457]">Brand:</strong> {{ product.brand.name }}</p>
+    <p>{{ product.description }}</p>
+    <p><strong class="text-[#B17457]">Price:</strong> ₹{{ product.price }}</p>
+    <p><strong class="text-[#B17457]">Seller:</strong> {{ product.seller.username }}</p>
+    <p><strong class="text-[#B17457]">Posted on:</strong> {{ product.created_at|date:"M d, Y" }}</p>
+  </div>
+
+  <!-- WhatsApp Contact Button -->
+  <div>
+    <button 
+      onclick="redirectToWhatsApp()"
+      class="bg-[green] hover:bg-[#944C34] transition-colors text-white font-semibold py-3 px-6 rounded-xl shadow-md text-lg"
+    >
+      💬 Contact seller
+    </button>
+  </div>
+
+</div>
+
+<!-- Image Preview Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex items-center justify-center touch-none">
+  <button onclick="closeModal()" class="absolute top-5 right-5 text-white text-3xl font-bold z-50">&times;</button>
+  <div class="relative w-full max-w-4xl h-full px-4 overflow-hidden">
+    <div id="modalImageWrapper" class="flex gap-4 overflow-x-auto snap-x h-full">
+      {% for image in product.images.all %}
+        <div class="flex-shrink-0 w-full flex items-center justify-center snap-start">
+          <img src="{{ image.image.url }}" alt="{{ product.name }}"
+               class="modal-img max-h-[80vh] object-contain transition-transform duration-300 cursor-zoom-in touch-pan-y"
+               ontouchstart="handleTouchStart(event)"
+               ontouchmove="handleTouchMove(event)"
+               onclick="toggleZoom(this)" />
         </div>
-      {% else %}
-        <p class="text-[#4A4947] italic">No images available.</p>
-      {% endif %}
+      {% endfor %}
     </div>
-
-    <!-- Product Info -->
-    <div class="text-[#4A4947] space-y-3">
-      <h2 class="text-2xl font-bold">{{ product.name }}</h2>
-      <p><strong class="text-[#B17457]">Brand:</strong> {{ product.brand.name }}</p>
-      <p>{{ product.description }}</p>
-      <p><strong class="text-[#B17457]">Price:</strong> ₹{{ product.price }}</p>
-      <p><strong class="text-[#B17457]">Seller:</strong> {{ product.seller.username }}</p>
-      <p><strong class="text-[#B17457]">Posted on:</strong> {{ product.created_at|date:"M d, Y" }}</p>
-      
-    </div>
-      <button 
-  onclick="redirectToWhatsApp()"
-  class="bg-[green] hover:bg-[#944C34] transition-colors text-primary font-semibold py-3 px-6 rounded-xl shadow-md text-lg"
->
-  💬 Contact seller
-</button>
   </div>
 </div>
+
+<!-- Scripts -->
 <script>
   function redirectToWhatsApp() {
     const productName = "{{ product.name|escapejs }}";
     const currentURL = window.location.href;
-    const message = `Hi, I'm interested in your product: ${productName}. Here is the link:
-                     ${currentURL}`;
-    
-    const phoneNumber = "918238322005"; // Seller's WhatsApp number (without +)
+    const message = `Hi, I'm interested in your product: ${productName}. Here is the link: ${currentURL}`;
+    const phoneNumber = "918238322005";
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    
     window.open(whatsappURL, "_blank");
+  }
+
+  function openModal(index) {
+    document.getElementById("imageModal").classList.remove("hidden");
+    const wrapper = document.getElementById("modalImageWrapper");
+    const imageWidth = wrapper.children[0].clientWidth + 16;
+    wrapper.scrollTo({
+      left: index * imageWidth,
+      behavior: "smooth"
+    });
+  }
+
+  function closeModal() {
+    document.getElementById("imageModal").classList.add("hidden");
+    document.querySelectorAll('.modal-img').forEach(img => {
+      img.classList.remove('scale-150', 'cursor-zoom-out');
+      img.classList.add('cursor-zoom-in');
+      img.style.transform = '';
+    });
+  }
+
+  function toggleZoom(img) {
+    const isZoomed = img.classList.contains('scale-150');
+    if (isZoomed) {
+      img.classList.remove('scale-150', 'cursor-zoom-out');
+      img.classList.add('cursor-zoom-in');
+      img.style.transform = '';
+    } else {
+      img.classList.add('scale-150', 'cursor-zoom-out');
+      img.classList.remove('cursor-zoom-in');
+    }
+  }
+
+  // Close modal on background click
+  document.getElementById("imageModal").addEventListener("click", function (e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Touch panning support when zoomed
+  let lastX = 0, lastY = 0;
+
+  function handleTouchStart(evt) {
+    if (evt.touches.length === 1) {
+      lastX = evt.touches[0].clientX;
+      lastY = evt.touches[0].clientY;
+    }
+  }
+
+  function handleTouchMove(evt) {
+    const img = evt.target;
+    if (img.classList.contains('scale-150')) {
+      evt.preventDefault();
+      const dx = evt.touches[0].clientX - lastX;
+      const dy = evt.touches[0].clientY - lastY;
+      lastX = evt.touches[0].clientX;
+      lastY = evt.touches[0].clientY;
+      const currentTransform = img.style.transform || "translate(0px, 0px)";
+      const match = currentTransform.match(/translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/);
+      let x = dx, y = dy;
+      if (match) {
+        x += parseFloat(match[1]);
+        y += parseFloat(match[2]);
+      }
+      img.style.transform = `translate(${x}px, ${y}px) scale(1.5)`;
+    }
   }
 </script>
 {% endblock %}
