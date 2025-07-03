@@ -24,3 +24,9 @@ class Product(models.Model):
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='product_images/')
+
+from django.shortcuts import render
+
+def contact(request):
+    whatsapp_number = '918238322005'  # Replace with your WhatsApp number in international format (no + or spaces)
+    return render(request, 'store/contact.html', {'whatsapp_number': whatsapp_number})

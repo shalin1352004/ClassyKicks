@@ -73,3 +73,8 @@ def add_brand(request):
     else:
         form = BrandForm()
     return render(request, 'store/add_brand.html', {'form': form})
+from django.shortcuts import render
+
+def contact(request):
+    whatsapp_number = '918238322005'  # e.g., '919876543210'
+    return render(request, 'store/contact.html', {'whatsapp_number': whatsapp_number})

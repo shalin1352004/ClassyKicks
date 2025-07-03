@@ -28,8 +28,12 @@
       <p><strong class="text-[#B17457]">Price:</strong> ₹{{ product.price }}</p>
       <p><strong class="text-[#B17457]">Seller:</strong> {{ product.seller.username }}</p>
       <p><strong class="text-[#B17457]">Posted on:</strong> {{ product.created_at|date:"M d, Y" }}</p>
+      
     </div>
-
+    <a href="{% url 'contact' %}">
+      <button class="bg-lightBg hover:bg-[#944C34] transition-colors text-green font-semibold py-3 px-6 rounded-xl shadow-md text-lg">
+          💬 Contact seller
+        </button></a>
   </div>
 </div>
 {% endblock %}

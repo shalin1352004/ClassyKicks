@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-darkBg px-4">
+  <div class="bg-primary p-8 rounded-2xl shadow-lg max-w-md w-full text-accent">
+    <h2 class="text-3xl font-bold mb-4 text-center text-lightBg">Contact Us</h2>
+    <p class="mb-6 text-center text-accent">
+      Have a question or want to connect? Reach out to us directly on WhatsApp!
+    </p>
+
+    <div class="flex justify-center">
+      <a href="https://wa.me/918238322005" target="_blank" rel="noopener noreferrer">
+        <button class="bg-[green] hover:bg-[#944C34] transition-colors text-white font-semibold py-3 px-6 rounded-xl shadow-md text-lg">
+          💬 Chat on WhatsApp
+        </button>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
