@@ -30,10 +30,25 @@
       <p><strong class="text-[#B17457]">Posted on:</strong> {{ product.created_at|date:"M d, Y" }}</p>
       
     </div>
-    <a href="{% url 'contact' %}">
-      <button class="bg-lightBg hover:bg-[#944C34] transition-colors text-green font-semibold py-3 px-6 rounded-xl shadow-md text-lg">
-          💬 Contact seller
-        </button></a>
+      <button 
+  onclick="redirectToWhatsApp()"
+  class="bg-[green] hover:bg-[#944C34] transition-colors text-primary font-semibold py-3 px-6 rounded-xl shadow-md text-lg"
+>
+  💬 Contact seller
+</button>
   </div>
 </div>
+<script>
+  function redirectToWhatsApp() {
+    const productName = "{{ product.name|escapejs }}";
+    const currentURL = window.location.href;
+    const message = `Hi, I'm interested in your product: ${productName}. Here is the link:
+                     ${currentURL}`;
+    
+    const phoneNumber = "918238322005"; // Seller's WhatsApp number (without +)
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    window.open(whatsappURL, "_blank");
+  }
+</script>
 {% endblock %}

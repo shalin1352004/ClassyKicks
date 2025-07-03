@@ -38,12 +38,15 @@
 <body class="bg-darkBg text-white min-h-screen">
 
 <!-- Navbar -->
+<!-- Navbar -->
 <nav class="bg-lightBg shadow-md sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-4">
     <div class="flex justify-between items-center h-16">
       <a href="/" class="text-2xl font-bold text-black hover:text-white transition animate-float">ClassyKicks</a>
 
       <div class="hidden md:flex space-x-6 text-sm font-medium items-center">
+        <a href="{% url 'contact' %}" class="hover:text-accent transition">Contact</a>
+
         {% if user.is_authenticated %}
           <a href="{% url 'add_brand' %}" class="hover:text-accent transition">Add Brand</a>
           <a href="{% url 'add_product' %}" class="hover:text-accent transition">Add Product</a>
@@ -71,21 +74,23 @@
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 text-sm font-medium space-y-2">
+    <a href="{% url 'contact' %}" class="block py-2 text-accent hover:text-white">Contact</a>
+
     {% if user.is_authenticated %}
       <a href="{% url 'add_brand' %}" class="block py-2 text-accent hover:text-white">Add Brand</a>
       <a href="{% url 'add_product' %}" class="block py-2 text-accent hover:text-white">Add Product</a>
-      <form method="post" action="{% url 'logout' %}" >
-  {% csrf_token %}
-  <button type="submit" class="block py-2 text-accent hover:text-white" style="color: accent;text-decoration: none; background: none; border: none; padding: 0;">
-    Logout
-  </button>
-</form>
-
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="block py-2 text-accent hover:text-white" style="text-decoration: none; background: none; border: none; padding: 0;">
+          Logout
+        </button>
+      </form>
     {% else %}
       <a href="{% url 'login' %}" class="block py-2 text-accent hover:text-white">Login</a>
     {% endif %}
   </div>
 </nav>
+
 
 <!-- Flash messages (optional) -->
 {% if messages %}
