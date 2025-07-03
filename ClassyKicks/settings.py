@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8dbcf)ikcxh*2dsh!!q5m87**)+&o4oh^%3s@qt&ruoh1!0wf*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'store',
     'widget_tweaks',
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     
 ]
 LOGOUT_REDIRECT_URL = '/'
