@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-[#D8D2C2] p-8 rounded-2xl shadow-lg text-[#4A4947]">
+
+  <h2 class="text-3xl font-bold mb-8 text-center text-[#4A4947]">Add New Product</h2>
+
+  <form method="post" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% csrf_token %}
+
+    <!-- ========== Product Fields ========== -->
+    <div class="space-y-4">
+
+      <!-- Brand -->
+      <div>
+        <label class="block mb-1 text-sm font-semibold text-[#B17457]">{{ form.brand.label_tag }}</label>
+        {{ form.brand|add_class:"w-full bg-[#B17457] text-[#FAF7F0] px-4 py-2 rounded-lg border border-[#4A4947]" }}
+        {% if form.brand.errors %}
+          <p class="text-red-500 text-sm mt-1">{{ form.brand.errors|striptags }}</p>
+        {% endif %}
+
+        <a href="{% url 'add_brand' %}" 
+           class="inline-block mt-2 text-sm text-[#4A4947] hover:underline hover:text-[#FAF7F0] transition">
+          + Can't find your brand? Add new brand
+        </a>
+      </div>
+
+      <!-- Product Name -->
+      <div>
+        <label class="block mb-1 text-sm font-semibold text-[#B17457]">{{ form.name.label_tag }}</label>
+        {{ form.name|add_class:"w-full bg-[#B17457] text-[#FAF7F0] px-4 py-2 rounded-lg border border-[#4A4947]" }}
+        {% if form.name.errors %}
+          <p class="text-red-500 text-sm mt-1">{{ form.name.errors|striptags }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block mb-1 text-sm font-semibold text-[#B17457]">{{ form.description.label_tag }}</label>
+        {{ form.description|add_class:"w-full bg-[#B17457] text-[#FAF7F0] px-4 py-2 rounded-lg border border-[#4A4947]" }}
+        {% if form.description.errors %}
+          <p class="text-red-500 text-sm mt-1">{{ form.description.errors|striptags }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Price -->
+      <div>
+        <label class="block mb-1 text-sm font-semibold text-[#B17457]">{{ form.price.label_tag }}</label>
+        {{ form.price|add_class:"w-full bg-[#B17457] text-[#FAF7F0] px-4 py-2 rounded-lg border border-[#4A4947]" }}
+        {% if form.price.errors %}
+          <p class="text-red-500 text-sm mt-1">{{ form.price.errors|striptags }}</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- ========== Product Images ========== -->
+    <div class="space-y-4">
+      {{ formset.management_form }}
+
+      {% for image_form in formset.forms %}
+        <div class="bg-[#B17457] p-4 rounded-lg shadow-inner">
+          <label class="block mb-1 text-sm font-semibold text-[#FAF7F0]">{{ image_form.image.label_tag }}</label>
+          {{ image_form.image|add_class:"w-full bg-[#FAF7F0] text-[#4A4947] px-3 py-2 rounded-lg border border-[#4A4947]" }}
+          {% if image_form.image.errors %}
+            <p class="text-red-500 text-sm mt-1">{{ image_form.image.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- ========== Submit Button ========== -->
+    <div class="col-span-1 md:col-span-2">
+      <button type="submit"
+              class="w-full bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-bold py-3 px-6 rounded-xl transition">
+        Upload Product
+      </button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

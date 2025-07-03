@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h2 class="mb-4 text-center text-[#4A4947] text-2xl font-semibold">Add a New Brand</h2>
+
+<div class="max-w-md mx-auto bg-[#D8D2C2] p-6 rounded-xl text-[#4A4947] shadow-lg">
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-4">
+        <label class="block mb-1 font-medium text-[#B17457]">{{ field.label_tag }}</label>
+        {{ field|add_class:"w-full bg-[#B17457] text-[#FAF7F0] px-4 py-2 rounded-lg border border-[#4A4947]" }}
+        {% if field.errors %}
+          <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <button type="submit"
+            class="w-full mt-3 bg-[#4A4947] hover:bg-[#3b3a38] py-2 px-4 rounded-lg text-[#FAF7F0] font-semibold transition">
+      Add Brand
+    </button>
+  </form>
+</div>
+{% endblock %}

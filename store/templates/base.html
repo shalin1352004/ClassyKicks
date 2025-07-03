@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ClassyKicks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FAF7F0',     
+            darkBg: '#F8F3G9',      // Slate-800
+            lightBg: '#B17457',     // Slate-700
+            accent: '#4A4947',     // Rose-500
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-darkBg text-white min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-lightBg shadow-md sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center h-16">
+      <a href="/" class="text-2xl font-bold text-primary hover:text-white transition">ClassyKicks</a>
+      
+      <div class="hidden md:flex space-x-6 text-sm font-medium items-center">
+        {% if user.is_authenticated %}
+          <a href="{% url 'add_brand' %}" class="hover:text-accent transition">Add Brand</a>
+          <a href="{% url 'add_product' %}" class="hover:text-accent transition">Add Product</a>
+
+          <form method="post" action="{% url 'logout' %}" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="hover:text-accent transition bg-transparent border-none p-0 m-0 text-sm">
+              Logout
+            </button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="hover:text-accent transition">Login</a>
+        {% endif %}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-button" class="md:hidden text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden hidden px-4 pb-4 text-sm font-medium space-y-2">
+    {% if user.is_authenticated %}
+      <a href="{% url 'add_brand' %}" class="block py-2 text-accent hover:text-white">Add Brand</a>
+      <a href="{% url 'add_product' %}" class="block py-2 text-accent hover:text-white">Add Product</a>
+      <form method="post" action="{% url 'logout' %}" >
+  {% csrf_token %}
+  <button type="submit" class="block py-2 text-accent hover:text-white" style="color: accent;text-decoration: none; background: none; border: none; padding: 0;">
+    Logout
+  </button>
+</form>
+
+    {% else %}
+      <a href="{% url 'login' %}" class="block py-2 text-accent hover:text-white">Login</a>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- Flash messages (optional) -->
+{% if messages %}
+  <div class="max-w-7xl mx-auto px-4 mt-4">
+    {% for message in messages %}
+      <div class="bg-green-500 text-white px-4 py-2 rounded mb-2">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto p-6">
+  {% block content %}{% endblock %}
+</div>
+
+<!-- Mobile Menu Toggle Script -->
+<script>
+  const btn = document.getElementById("mobile-menu-button");
+  const menu = document.getElementById("mobile-menu");
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
+
+</body>
+</html>

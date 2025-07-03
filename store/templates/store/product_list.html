@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 mt-10 text-[#FAF7F0]">
+
+  <h2 class="text-3xl font-bold text-center text-[#4A4947] mb-8">All Products</h2>
+
+  <!-- Filter by Brand -->
+  <form method="get" class="flex flex-col md:flex-row gap-4 items-center justify-center mb-8">
+    <select name="brand" class="bg-[#D8D2C2] border border-[#4A4947] text-[#4A4947] px-4 py-2 rounded-lg">
+      <option value="">All Brands</option>
+      {% for brand in brands %}
+        <option value="{{ brand.id }}" {% if request.GET.brand == brand.id|stringformat:"s" %}selected{% endif %}>
+          {{ brand.name }}
+        </option>
+      {% endfor %}
+    </select>
+    <button type="submit"
+            class="bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold px-6 py-2 rounded-lg transition">
+      Filter
+    </button>
+  </form>
+
+  <!-- Product Cards -->
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    {% for product in products %}
+      <div class="bg-[#F8F3D9] rounded-xl shadow-lg overflow-hidden flex flex-col">
+        {% if product.images.first %}
+          <img src="{{ product.images.first.image.url }}"
+               alt="{{ product.name }}"
+               class="w-full h-60 object-cover" />
+        {% endif %}
+        <div class="p-4 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-semibold text-[#4A4947] mb-2">{{ product.name }}</h3>
+            <p class="text-[#4A4947] text-sm mb-2">{{ product.description|truncatechars:100 }}</p>
+            <p class="text-[#4A4947] font-bold text-lg mb-4">₹{{ product.price }}</p>
+          </div>
+          <a href="{% url 'product_detail' product.pk %}" class="mt-auto bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold py-2 px-4 rounded-lg text-center transition">View Details</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center col-span-full text-[#4A4947]">No products found.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

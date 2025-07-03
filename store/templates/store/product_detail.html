@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 px-4 text-[#FAF7g6]">
+
+  <div class="bg-[#F8F3D9] rounded-2xl shadow-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Product Images -->
+    <div>
+      {% if product.images.all %}
+        <div class="flex gap-3 overflow-x-auto">
+          {% for image in product.images.all %}
+            <img src="{{ image.image.url }}" alt="{{ product.name }}"
+                 class="h-60 w-auto object-contain rounded-lg border border-[#4A4947]" />
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-[#4A4947] italic">No images available.</p>
+      {% endif %}
+    </div>
+
+    <!-- Product Info -->
+    <div class="text-[#4A4947] space-y-3">
+      <h2 class="text-2xl font-bold">{{ product.name }}</h2>
+      <p><strong class="text-[#B17457]">Brand:</strong> {{ product.brand.name }}</p>
+      <p>{{ product.description }}</p>
+      <p><strong class="text-[#B17457]">Price:</strong> ₹{{ product.price }}</p>
+      <p><strong class="text-[#B17457]">Seller:</strong> {{ product.seller.username }}</p>
+      <p><strong class="text-[#B17457]">Posted on:</strong> {{ product.created_at|date:"M d, Y" }}</p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
