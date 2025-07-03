@@ -89,7 +89,10 @@ DATABASES = {
         default=config('DATABASE_URL')
     )
 }
-
+from decouple import config
+from pathlib import Path
+from django.core.management.utils import get_random_secret_key
+import dj_database_url
 # ...existing code...
 import dj_database_url
 from decouple import config
