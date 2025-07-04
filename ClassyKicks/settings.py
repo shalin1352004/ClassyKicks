@@ -64,6 +64,7 @@ DATABASES = {
     'default': dj_database_url.config(default=config('DATABASE_URL'))
 }
 
+
 # === AUTH SETTINGS ===
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
