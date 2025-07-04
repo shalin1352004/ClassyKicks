@@ -13,7 +13,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os 
 from decouple import config
+from pathlib import Path
 import dj_database_url
+from decouple import config
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-8dbcf)ikcxh*2dsh!!q5m87**)+&o4oh^%3s@qt&ruoh1!0wf*')
+SECRET_KEY = 'django-insecure-8dbcf)ikcxh*2dsh!!q5m87**)+&o4oh^%3s@qt&ruoh1!0wf*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'classykicks.onrender.com', '.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -47,33 +51,41 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    
 ]
-
+LOGOUT_REDIRECT_URL = '/'
 ROOT_URLCONF = 'ClassyKicks.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], 
+        'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
 WSGI_APPLICATION = 'ClassyKicks.wsgi.application'
+CSRF_TRUSTED_ORIGINS = ['https://classykicks.onrender.com']
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -83,6 +95,8 @@ DATABASES = {
         default=config('DATABASE_URL')
     )
 }
+
+STATIC_URL = '/static/'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -117,36 +131,20 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
-# Cloudinary configuration
-if config('CLOUD_NAME', default=None):
-    import cloudinary
-    import cloudinary.uploader
-    import cloudinary.api
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+}
 
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': config('CLOUD_NAME'),
-        'API_KEY': config('CLOUDINARY_API_KEY'),
-        'API_SECRET': config('CLOUDINARY_API_SECRET'),
-    }
-
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Security settings
-CSRF_TRUSTED_ORIGINS = ['https://classykicks.onrender.com', 'https://*.onrender.com']
-
-# Authentication settings
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
