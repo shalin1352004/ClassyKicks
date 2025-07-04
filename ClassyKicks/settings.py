@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
 ]
-INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 import cloudinary
 import cloudinary.uploader
