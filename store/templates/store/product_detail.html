@@ -4,171 +4,164 @@
 {% block content %}
 <div class="max-w-4xl mx-auto mt-10 px-4 text-[#4A4947] space-y-6">
 
-    <div>
-    {% if product.productimage_set.all %} {# Use product.productimage_set.all for clarity if that's your related name #}
-      <div class="flex gap-3 overflow-x-auto pb-2 custom-scrollbar"> {# Added custom-scrollbar class for styling #}
-        {% for image in product.productimage_set.all %}
-          <img src="{{ image.image.url }}" alt="{{ product.name }} image {{ forloop.counter }}"
-               class="h-60 w-auto object-contain rounded-lg border border-[#D8D2C2] hover:border-[#4A4947] cursor-pointer transition"
-               onclick="openModal({{ forloop.counter0 }})" />
-        {% endfor %}
-      </div>
-    {% else %}
-      <p class="italic text-[#6B6A68]">No images available for this product.</p>
-    {% endif %}
-  </div>
+  <!-- Product Images Carousel -->
+  <div>
+    {% with product.productimage_set.all as images %}
+      {% if images %}
+        <div class="flex gap-3 overflow-x-auto pb-2 custom-scrollbar">
+          {% for image in images %}
+            <img src="{{ image.image.url }}" alt="{{ product.name }} Image {{ forloop.counter }}"
+                 loading="lazy"
+                 class="h-60 w-auto object-contain rounded-lg border border-[#D8D2C2] hover:border-[#4A4947] cursor-pointer transition"
+                 onclick="openModal({{ forloop.counter0 }})" />
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="italic text-[#6B6A68]">No images available for this product.</p>
+      {% endif %}
+    {% endwith %}
+  </div>
 
-  ---
+  <!-- Product Info -->
+  <div class="space-y-3">
+    <h2 class="text-4xl font-bold">{{ product.name }}</h2>
+    <p class="text-lg"><strong class="text-[#B17457]">Brand:</strong> {{ product.brand.name }}</p>
+    <p class="text-md leading-relaxed text-[#5A5A5A]">{{ product.description }}</p>
+    <p class="text-2xl font-semibold text-[#4A4947]"><strong class="text-[#B17457]">Price:</strong> ₹{{ product.price }}</p>
+    <p class="text-md"><strong class="text-[#B17457]">Seller:</strong> {{ product.seller.username }}</p>
+    <p class="text-sm text-[#6B6A68]"><strong class="text-[#B17457]">Posted on:</strong> {{ product.created_at|date:"M d, Y" }}</p>
+  </div>
 
-    <div class="space-y-3"> {# Increased space-y for better readability #}
-    <h2 class="text-4xl font-bold text-[#4A4947]">{{ product.name }}</h2> {# Larger heading #}
-    <p class="text-lg"><strong class="text-[#B17457]">Brand:</strong> {{ product.brand.name }}</p>
-    <p class="text-md leading-relaxed text-[#5A5A5A]">{{ product.description }}</p> {# Added line height and slightly darker text #}
-    <p class="text-2xl font-semibold text-[#4A4947]"><strong class="text-[#B17457]">Price:</strong> ₹{{ product.price }}</p> {# Larger price #}
-    <p class="text-md"><strong class="text-[#B17457]">Seller:</strong> {{ product.seller.username }}</p>
-    <p class="text-sm text-[#6B6A68]"><strong class="text-[#B17457]">Posted on:</strong> {{ product.created_at|date:"M d, Y" }}</p> {# Smaller, muted posted date #}
-  </div>
-
-  ---
-
-    <div class="pt-4"> {# Added top padding #}
-    <button 
-      onclick="redirectToWhatsApp()"
-      class="bg-[#25D366] hover:bg-[#1DA851] transition-colors text-white font-semibold py-3 px-8 rounded-xl shadow-lg text-lg flex items-center justify-center gap-2" {# Changed to WhatsApp green #}
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-      Contact Seller
-    </button>
-  </div>
+  <!-- Contact Seller Button -->
+  <div class="pt-4">
+    <button 
+      onclick="redirectToWhatsApp()"
+      class="bg-[#25D366] hover:bg-[#1DA851] transition-colors text-white font-semibold py-3 px-8 rounded-xl shadow-lg text-lg flex items-center justify-center gap-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-message-circle">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+      </svg>
+      Contact Seller
+    </button>
+  </div>
 
 </div>
 
+<!-- Modal for full-screen images -->
 <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden flex items-center justify-center touch-none">
-  <button onclick="closeModal()" class="absolute top-5 right-5 text-white text-4xl font-bold z-50 p-2 leading-none">&times;</button> {# Larger close button #}
-   <div class="relative w-full max-w-5xl h-full px-4 overflow-hidden"> {# Increased max-width for modal #}
-    <div id="modalImageWrapper" class="flex gap-4 overflow-x-auto snap-x h-full">
-      {% for image in product.productimage_set.all %}
-        <div class="flex-shrink-0 w-full flex items-center justify-center snap-center"> {# Changed snap-start to snap-center #}
-    <img src="{{ image.image.url }}" alt="{{ product.name }} image {{ forloop.counter }}" {# FIXED: Corrected image source #}
-               class="modal-img max-h-[90vh] object-contain transition-transform duration-300 cursor-zoom-in touch-pan-y" {# Increased max-height for images #}
-               ontouchstart="handleTouchStart(event)"
-               ontouchmove="handleTouchMove(event)"
-               onclick="toggleZoom(this)" />
-        </div>
-      {% endfor %}
-    </div>
-  </div>
+  <button onclick="closeModal()" class="absolute top-5 right-5 text-white text-4xl font-bold z-50 p-2 leading-none">&times;</button>
+  <div class="relative w-full max-w-5xl h-full px-4 overflow-hidden">
+    <div id="modalImageWrapper" class="flex gap-4 overflow-x-auto snap-x h-full">
+      {% for image in product.productimage_set.all %}
+        <div class="flex-shrink-0 w-full flex items-center justify-center snap-center">
+          <img src="{{ image.image.url }}" alt="{{ product.name }} Full Image {{ forloop.counter }}"
+               class="modal-img max-h-[90vh] object-contain transition-transform duration-300 cursor-zoom-in touch-pan-y"
+               ontouchstart="handleTouchStart(event)"
+               ontouchmove="handleTouchMove(event)"
+               onclick="toggleZoom(this)" />
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
+<!-- Scripts -->
 <script>
-  function redirectToWhatsApp() {
-    const productName = "{{ product.name|escapejs }}";
-    const currentURL = window.location.href;
-    const message = `Hi, I'm interested in your product: ${productName}. Here is the link: ${currentURL}`;
-    const phoneNumber = "918238322005"; // Ensure this is the correct seller's number
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, "_blank");
-  }
+  function redirectToWhatsApp() {
+    const productName = "{{ product.name|escapejs }}";
+    const currentURL = window.location.href;
+    const message = `Hi, I'm interested in your product: ${productName}. Here is the link: ${currentURL}`;
+    const phoneNumber = "918238322005";
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
+  }
 
-  function openModal(index) {
-    document.getElementById("imageModal").classList.remove("hidden");
-    // Wait for modal to become visible before calculating scroll
-    requestAnimationFrame(() => {
-      const wrapper = document.getElementById("modalImageWrapper");
-      // Use scrollWidth divided by number of children for accurate width if gap isn't fixed
-      const imageWidth = wrapper.scrollWidth / wrapper.children.length; 
-      wrapper.scrollTo({
-        left: index * imageWidth,
-        behavior: "smooth"
-      });
-    });
-  }
+  function openModal(index) {
+    document.getElementById("imageModal").classList.remove("hidden");
+    requestAnimationFrame(() => {
+      const wrapper = document.getElementById("modalImageWrapper");
+      const imageWidth = wrapper.scrollWidth / wrapper.children.length;
+      wrapper.scrollTo({
+        left: index * imageWidth,
+        behavior: "smooth"
+      });
+    });
+  }
 
-  function closeModal() {
-    document.getElementById("imageModal").classList.add("hidden");
-    document.querySelectorAll('.modal-img').forEach(img => {
-      img.classList.remove('scale-150', 'cursor-zoom-out');
-      img.classList.add('cursor-zoom-in');
-      img.style.transform = ''; // Reset any panning transform
-    });
-  }
+  function closeModal() {
+    document.getElementById("imageModal").classList.add("hidden");
+    document.querySelectorAll('.modal-img').forEach(img => {
+      img.classList.remove('scale-150', 'cursor-zoom-out');
+      img.classList.add('cursor-zoom-in');
+      img.style.transform = '';
+    });
+  }
 
-  function toggleZoom(img) {
-    const isZoomed = img.classList.contains('scale-150');
-    if (isZoomed) {
-      img.classList.remove('scale-150', 'cursor-zoom-out');
-      img.classList.add('cursor-zoom-in');
-      img.style.transform = ''; // Reset transform on unzoom
-    } else {
-      img.classList.add('scale-150', 'cursor-zoom-out');
-      img.classList.remove('cursor-zoom-in');
-    }
-  }
+  function toggleZoom(img) {
+    const isZoomed = img.classList.contains('scale-150');
+    if (isZoomed) {
+      img.classList.remove('scale-150', 'cursor-zoom-out');
+      img.classList.add('cursor-zoom-in');
+      img.style.transform = '';
+    } else {
+      img.classList.add('scale-150', 'cursor-zoom-out');
+      img.classList.remove('cursor-zoom-in');
+    }
+  }
 
-  // Close modal on background click
-  document.getElementById("imageModal").addEventListener("click", function (e) {
-    if (e.target === this) closeModal();
-  });
+  let lastX = 0, lastY = 0, isDragging = false;
 
-  // Touch panning support when zoomed
-  let lastX = 0, lastY = 0;
-  let isDragging = false;
+  function handleTouchStart(evt) {
+    const img = evt.target;
+    if (img.classList.contains('scale-150')) {
+      isDragging = true;
+      if (evt.touches.length === 1) {
+        lastX = evt.touches[0].clientX;
+        lastY = evt.touches[0].clientY;
+      }
+    }
+  }
 
-  function handleTouchStart(evt) {
-    const img = evt.target;
-    if (img.classList.contains('scale-150')) {
-      isDragging = true;
-      if (evt.touches.length === 1) {
-        lastX = evt.touches[0].clientX;
-        lastY = evt.touches[0].clientY;
-      }
-    }
-  }
+  function handleTouchMove(evt) {
+    const img = evt.target;
+    if (isDragging && img.classList.contains('scale-150')) {
+      evt.preventDefault();
+      const dx = evt.touches[0].clientX - lastX;
+      const dy = evt.touches[0].clientY - lastY;
+      lastX = evt.touches[0].clientX;
+      lastY = evt.touches[0].clientY;
+      const currentTransform = img.style.transform || "translate(0px, 0px) scale(1.5)";
+      const match = currentTransform.match(/translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/);
+      let x = dx, y = dy;
+      if (match) {
+        x += parseFloat(match[1]);
+        y += parseFloat(match[2]);
+      }
+      img.style.transform = `translate(${x}px, ${y}px) scale(1.5)`;
+    }
+  }
 
-  function handleTouchMove(evt) {
-    const img = evt.target;
-    if (isDragging && img.classList.contains('scale-150')) {
-      evt.preventDefault(); // Prevent scrolling the background when zoomed and panning
-      const dx = evt.touches[0].clientX - lastX;
-      const dy = evt.touches[0].clientY - lastY;
-      lastX = evt.touches[0].clientX;
-      lastY = evt.touches[0].clientY;
-      
-      const currentTransform = img.style.transform || "translate(0px, 0px) scale(1.5)";
-      const match = currentTransform.match(/translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/);
-      let x = dx, y = dy;
-      if (match) {
-        x += parseFloat(match[1]);
-        y += parseFloat(match[2]);
-      }
-      img.style.transform = `translate(${x}px, ${y}px) scale(1.5)`;
-    }
-  }
-
-  // Reset dragging state on touch end
-  document.getElementById("imageModal").addEventListener("touchend", function() {
-    isDragging = false;
-  });
+  document.getElementById("imageModal").addEventListener("touchend", () => isDragging = false);
+  document.getElementById("imageModal").addEventListener("click", function (e) {
+    if (e.target === this) closeModal();
+  });
 </script>
 
+<!-- Styles -->
 <style>
-/* Custom scrollbar for horizontal image gallery */
 .custom-scrollbar::-webkit-scrollbar {
   height: 8px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #F0EDE5; /* Light background */
+  background: #F0EDE5;
   border-radius: 10px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #D8D2C2; /* Thumb color */
+  background: #D8D2C2;
   border-radius: 10px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #B1AC9D; /* Darker thumb on hover */
+  background: #B1AC9D;
 }
 </style>
 {% endblock %}

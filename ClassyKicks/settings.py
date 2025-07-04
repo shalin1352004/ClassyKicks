@@ -16,6 +16,8 @@ from decouple import config
 from pathlib import Path
 import dj_database_url
 from decouple import config
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
 ]
+INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 import cloudinary
 import cloudinary.uploader

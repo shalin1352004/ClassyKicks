@@ -1,8 +1,6 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField  # Import this
 
 class Brand(models.Model):
     name = models.CharField(max_length=100)
@@ -23,10 +21,11 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='product_images/')
+    image = CloudinaryField('image')  # ✅ changed from ImageField to CloudinaryField
 
+# Optional: move this view to `views.py` if it’s not a model
 from django.shortcuts import render
 
 def contact(request):
-    whatsapp_number = '918238322005'  # Replace with your WhatsApp number in international format (no + or spaces)
+    whatsapp_number = '918238322005'
     return render(request, 'store/contact.html', {'whatsapp_number': whatsapp_number})
