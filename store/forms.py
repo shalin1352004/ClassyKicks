@@ -34,7 +34,6 @@ class ProductImageForm(forms.ModelForm):
         fields = ['image']
         widgets = {
             'image': forms.ClearableFileInput(attrs={
-                'multiple': True,
                 'class': 'w-full p-2 bg-white border border-gray-300 rounded-md'
             })
         }

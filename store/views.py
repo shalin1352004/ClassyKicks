@@ -30,6 +30,7 @@ class CustomLoginView(LoginView):
 @login_required
 def add_product(request):
     ImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=5, max_num=5, can_delete=True)
+
     
     if request.method == 'POST':
         form = ProductForm(request.POST)
