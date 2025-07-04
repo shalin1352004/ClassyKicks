@@ -28,16 +28,18 @@
     {% for product in products %}
       <div class="bg-[#F8F3D9] w-full rounded-xl shadow-xl hover:shadow-2xl transition duration-300 overflow-hidden relative group">
         <a href="{% url 'product_detail' product.pk %}">
-          {% if product.images.first %}
-            <img src="{{ product.images.first.image.url }}"
-                 alt="{{ product.name }}"
-                 class="w-full h-52 object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-105"
-                 onerror="this.onerror=null; this.src='/static/default.jpg';" />
-          {% else %}
-            <img src="/static/default.jpg"
-                 alt="No image"
-                 class="w-full h-52 object-contain p-4 bg-white" />
-          {% endif %}
+          {% with product.productimage_set.first as first_image %}
+            {% if first_image %}
+              <img src="{{ first_image.image.url }}"
+                   alt="{{ product.name }}"
+                   class="w-full h-52 object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-105"
+                   onerror="this.onerror=null; this.src='/static/default.jpg';" />
+            {% else %}
+              <img src="/static/default.jpg"
+                   alt="No image"
+                   class="w-full h-52 object-contain p-4 bg-white" />
+            {% endif %}
+          {% endwith %}
         </a>
         <div class="px-4 py-3 flex flex-col h-full">
           <h3 class="text-lg font-bold text-[#4A4947] mb-1 text-center">{{ product.name }}</h3>
