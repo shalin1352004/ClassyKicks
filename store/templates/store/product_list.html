@@ -4,7 +4,6 @@
 
   <h2 class="text-4xl font-extrabold text-center text-[#4A4947] mb-12 tracking-wide uppercase">Explore Our Collection</h2>
 
-  <!-- Filter Form -->
   <form method="get" class="flex flex-col md:flex-row gap-4 items-center justify-center mb-10">
     <select name="brand" class="bg-[#D8D2C2] border border-[#4A4947] text-[#4A4947] px-4 py-2 rounded-lg shadow-md focus:outline-none">
       <option value="">All Brands</option>
@@ -20,23 +19,15 @@
     </button>
   </form>
 
-  <!-- Product Grid -->
-  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2"> {# Corrected lg:grid-cols3 to lg:grid-cols-3 #}
     {% for product in products %}
       <div class="bg-[#F8F3D9] w-full rounded-xl shadow-xl hover:shadow-2xl transition duration-300 overflow-hidden relative group">
         <a href="{% url 'product_detail' product.pk %}">
-          {% with product.productimage_set.first as first_image %}
-            {% if first_image %}
-              <img src="{{ first_image.image.url }}"
-                   alt="{{ product.name }}"
-                   class="w-full h-52 object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-105"
-                   onerror="this.onerror=null; this.src='/static/default.jpg';" />
-            {% else %}
-              <img src="/static/default.jpg"
-                   alt="No image"
-                   class="w-full h-52 object-contain p-4 bg-white" />
-            {% endif %}
-          {% endwith %}
+          {% if product.images.first %}
+            <img src="{{ product.images.first.image.url }}"
+                 alt="{{ product.name }}"
+                 class="w-full h-52 object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-105" />
+          {% endif %}
         </a>
         <div class="px-4 py-3 flex flex-col h-full">
           <h3 class="text-lg font-bold text-[#4A4947] mb-1 text-center">{{ product.name }}</h3>
