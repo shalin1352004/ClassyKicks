@@ -6,17 +6,19 @@
 
   <!-- Product Images -->
   <div>
-    {% if product.images.all %}
-      <div class="flex gap-3 overflow-x-auto">
-        {% for image in product.images.all %}
-          <img src="{{ image.image.url }}" alt="{{ product.name }}"
-               class="h-60 w-auto object-contain rounded-lg border border-[#4A4947] cursor-pointer"
-               onclick="openModal({{ forloop.counter0 }})" />
-        {% endfor %}
-      </div>
-    {% else %}
-      <p class="italic">No images available.</p>
-    {% endif %}
+    {% with product.productimage_set.all as images %}
+      {% if images %}
+        <div class="flex gap-3 overflow-x-auto">
+          {% for image in images %}
+            <img src="{{ image.image.url }}" alt="{{ product.name }}"
+                 class="h-60 w-auto object-contain rounded-lg border border-[#4A4947] cursor-pointer"
+                 onclick="openModal({{ forloop.counter0 }})" />
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="italic">No images available.</p>
+      {% endif %}
+    {% endwith %}
   </div>
 
   <!-- Product Info -->
@@ -33,7 +35,7 @@
   <div>
     <button 
       onclick="redirectToWhatsApp()"
-      class="bg-[green] hover:bg-[#944C34] transition-colors text-white font-semibold py-3 px-6 rounded-xl shadow-md text-lg"
+      class="bg-green-600 hover:bg-[#944C34] transition-colors text-white font-semibold py-3 px-6 rounded-xl shadow-md text-lg"
     >
       💬 Contact seller
     </button>
@@ -46,9 +48,9 @@
   <button onclick="closeModal()" class="absolute top-5 right-5 text-white text-3xl font-bold z-50">&times;</button>
   <div class="relative w-full max-w-4xl h-full px-4 overflow-hidden">
     <div id="modalImageWrapper" class="flex gap-4 overflow-x-auto snap-x h-full">
-      {% for image in product.images.all %}
+      {% for image in product.productimage_set.all %}
         <div class="flex-shrink-0 w-full flex items-center justify-center snap-start">
-          <img src="{{ product.image.url }}" alt="{{ product.name }}"
+          <img src="{{ image.image.url }}" alt="{{ product.name }}"
                class="modal-img max-h-[80vh] object-contain transition-transform duration-300 cursor-zoom-in touch-pan-y"
                ontouchstart="handleTouchStart(event)"
                ontouchmove="handleTouchMove(event)"
