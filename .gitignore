@@ -1,0 +1,18 @@
+# Ignore Python cache and bytecode
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Ignore environment files
+env/
+*.env
+
+# Ignore IDE/editor folders
+.vscode/
+*.log
+
+# Ignore compiled static files (if any)
+staticfiles/
+
+# DO NOT ignore media folder — we want it pushed!
+# media/
