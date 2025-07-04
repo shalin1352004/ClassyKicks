@@ -19,6 +19,7 @@
         {% if form.brand.errors %}
           <p class="text-red-500 text-sm mt-1">{{ form.brand.errors|striptags }}</p>
         {% endif %}
+
         <a href="{% url 'add_brand' %}" 
            class="inline-block mt-2 text-sm text-[#4A4947] hover:underline hover:text-[#FAF7F0] transition">
           + Can't find your brand? Add new brand
@@ -51,11 +52,13 @@
           <p class="text-red-500 text-sm mt-1">{{ form.price.errors|striptags }}</p>
         {% endif %}
       </div>
+
     </div>
 
     <!-- ========== Product Images ========== -->
     <div class="space-y-4">
       {{ formset.management_form }}
+
       {% for image_form in formset.forms %}
         <div class="bg-[#B17457] p-4 rounded-lg shadow-inner">
           <label class="block mb-1 text-sm font-semibold text-[#FAF7F0]">{{ image_form.image.label_tag }}</label>
@@ -65,6 +68,7 @@
           {% endif %}
         </div>
       {% endfor %}
+
     </div>
 
     <!-- ========== Submit Button ========== -->

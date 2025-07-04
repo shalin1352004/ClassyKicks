@@ -2,15 +2,10 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 mt-10 text-[#FAF7F0]">
 
-  <h2 class="text-4xl font-extrabold text-center text-[#4A4947] mb-12 tracking-wide uppercase">
-    Explore Our Collection
-  </h2>
+  <h2 class="text-4xl font-extrabold text-center text-[#4A4947] mb-12 tracking-wide uppercase">Explore Our Collection</h2>
 
-  <!-- Filter Form -->
   <form method="get" class="flex flex-col md:flex-row gap-4 items-center justify-center mb-10">
-    <label for="brand" class="sr-only">Select Brand</label>
-    <select name="brand" id="brand"
-            class="bg-[#D8D2C2] border border-[#4A4947] text-[#4A4947] px-4 py-2 rounded-lg shadow-md focus:outline-none">
+    <select name="brand" class="bg-[#D8D2C2] border border-[#4A4947] text-[#4A4947] px-4 py-2 rounded-lg shadow-md focus:outline-none">
       <option value="">All Brands</option>
       {% for brand in brands %}
         <option value="{{ brand.id }}" {% if request.GET.brand == brand.id|stringformat:"s" %}selected{% endif %}>
@@ -19,13 +14,12 @@
       {% endfor %}
     </select>
     <button type="submit"
-            class="bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold px-6 py-2 rounded-lg shadow-md transition">
+              class="bg-[#4A4947] hover:bg-[#3b3a38] text-[#FAF7F0] font-semibold px-6 py-2 rounded-lg shadow-md transition">
       Filter
     </button>
   </form>
 
-  <!-- Product Grid -->
-  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2">
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2"> {# Corrected lg:grid-cols3 to lg:grid-cols-3 #}
     {% for product in products %}
       <div class="bg-[#F8F3D9] w-full rounded-xl shadow-xl hover:shadow-2xl transition duration-300 overflow-hidden relative group">
         <a href="{% url 'product_detail' product.pk %}">
@@ -49,6 +43,5 @@
       <p class="text-center col-span-full text-[#4A4947] text-xl">No products found.</p>
     {% endfor %}
   </div>
-
 </div>
 {% endblock %}
