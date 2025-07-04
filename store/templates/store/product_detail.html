@@ -48,7 +48,7 @@
     <div id="modalImageWrapper" class="flex gap-4 overflow-x-auto snap-x h-full">
       {% for image in product.images.all %}
         <div class="flex-shrink-0 w-full flex items-center justify-center snap-start">
-          <img src="{{ image.image.url }}" alt="{{ product.name }}"
+          <img src="{{ product.image.url }}" alt="{{ product.name }}"
                class="modal-img max-h-[80vh] object-contain transition-transform duration-300 cursor-zoom-in touch-pan-y"
                ontouchstart="handleTouchStart(event)"
                ontouchmove="handleTouchMove(event)"
