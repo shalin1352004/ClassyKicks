@@ -24,7 +24,7 @@
       <div class="bg-[#F8F3D9] w-full rounded-xl shadow-xl hover:shadow-2xl transition duration-300 overflow-hidden relative group">
         <a href="{% url 'product_detail' product.pk %}">
           {% if product.images.first %}
-            <img src="{{ product.images.first.image.url }}"
+            <img src="{{ product.images.url }}"
                  alt="{{ product.name }}"
                  class="w-full h-52 object-contain p-4 bg-white transition-transform duration-300 group-hover:scale-105" />
           {% endif %}
